@@ -1,0 +1,7 @@
+.label {color:violet;font-size:70%;padding-right:3pt;}
+tr:nth-child(even) {
+  background-color: gainsboro;
+}
+th {background-color: powderblue;}
+.hilight {background-color:yellow;}
+.hilite {background-color:yellow;}
