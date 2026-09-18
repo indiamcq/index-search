@@ -1,9 +1,11 @@
+@rem version 3
 @echo off
 set stype=%1
 set sstring=%2
 set nosp=%3
 set grp=%4
 set output=%~5
+set debug=%~6
 call :main
 goto :eof
 
@@ -18,28 +20,29 @@ goto :eof
   set reset=[0m
   set green=[32m
   set blue=[34m
+  if not exist %source% echo %red%all-indexes.xml not found in 'source' folder! Can't complete search. Will exit in 20 seconds. & timeout 20 & exit
   set safestring=%sstring:?=_%
   set htmlfile=%cd%\output\%stype%-%grp%-%safestring%.html
   set java=..\javafx\bin\java.exe
   set saxon=..\saxon\saxon12he.jar
   set timeout=60
+  if not exist output md output
   if exist %htmlfile% del %htmlfile%
   rem end setup
   call :searchpresent %stype%
-  if exist %htmlfile% echo %green%Created: %htmlfile% %reset%
-  start %htmlfile%
+  if exist chrome.exe (
+    echo %cyan%start chrome.exe "%outfile%"%reset%
+    start chrome.exe "%outfile%"
+  ) else (
+    echo %cyan%start edge.exe "%outfile%"%reset%
+    start "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" "%outfile%"
+  )
   if '%errorlevel%' == 1 pause
   timeout 60
 goto :eof
 
-:search0
-:: single XSLT now working, so not used.
-  call :xslt searchXML.xslt %source% %search% "type=%stype% searchword='%sstring%'"
-  call :xslt present.xslt %search% %htmlfile%  "searchword='%sstring%'"
-goto :eof
-
 :searchpresent
-  call :xslt search-present-target3.xslt %source% %htmlfile% "type=%stype% searchword='%sstring%' nosp=%nosp% target='%grp%' output=%output%"
+  call :xslt search-present-target.xslt %source% %htmlfile% "type=%stype% searchword='%sstring%' nosp=%nosp% target='%grp%' output=%output%"
 goto :eof
 
 :xslt
@@ -57,7 +60,7 @@ goto :eof
   set params=%~4
   if not exist %infile% echo "infile not found!" & exit /b
   if defined params set params=%params:'="%
-    @if defined info2 echo %cyan%%java% -jar "%saxon%" -o:"%outfile%" "%infile%" "%script%" %params%%reset%
-    %java% -Xmx1024m  %suppressXsltNamespaceCheck% -jar "%saxon%" -o:"%outfile%" "%infile%" "%script%" %params%
-  rem if exit %outfile% echo Info: Created %outfile%
+  @if defined info2 echo %cyan%%java% -jar "%saxon%" -o:"%outfile%" "%infile%" "%script%" %params%%reset%
+  %java% -Xmx1024m  %suppressXsltNamespaceCheck% -jar "%saxon%" -o:"%outfile%" "%infile%" "%script%" %params%
+  if exist %htmlfile% echo %green%Created: %htmlfile% %reset%
 goto :eof

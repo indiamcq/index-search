@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Index Search</title>
-        <hta:application id="IndexSearch" singleinstance="yes" ICON="icon.ico"/>
+        <hta:application id="IndexSearch" singleinstance="yes" ICON="index.ico"/>
         <style>
         body { font-family: sans-serif; padding: 20px; background:lightblue;}
         textarea { width: 100%; height: 120px; font-family: monospace; }
@@ -68,12 +68,20 @@
             normwdproportion = 0.28
             htpx = height * normhtproportion
             wdpx = width * normwdproportion
-window.resizeTo wdpx, htpx
+            ' Set the size of the window
+			 window.resizeTo wdpx, htpx
+			' 1. Create the XML DOM object
+            'Set xmlDoc = CreateObject("MSXML2.DOMDocument.6.0")
+            'xmlDoc.setProperty "SelectionLanguage", "XPath"
+            ' 2. Load the XML file
+            'If xmlDoc.Load("setup.xml") Then
+            ' 	set apptitle = xmlDoc.selectNodes("//setup/apptitle[1]")
+            'End If
+            'Set xmlDoc = Nothing
+            'document.getElementById("apptitle").InnerText = apptitle
 
             Sub window_onload
-				 IndexSearch.icon = "icon.ico"
-                ' Set the size of the window
-                
+				 IndexSearch.icon = "index.ico"
             End Sub
 
             Function GetRadioValue(radioGroup)
@@ -88,14 +96,13 @@ window.resizeTo wdpx, htpx
             End Function
 
             Sub FindString()
-                Dim searchString, selectedValue
+                Dim searchString, selectedValue, selectedOutput, selectedType
                 searchString = Replace(document.getElementById("stringSearch").value," ",nosp)
 				  selectedValue = GetRadioValue(document.myGroup.group)
 				  selectedOutput = GetRadioValue(document.outputType.out)
 				  selectedType = GetRadioValue(document.searchType.type)
  				  call RunScript("search.cmd",selectedType,searchString,nosp,selectedValue,selectedOutput)
             End Sub
-
   
             Sub RunScript(script,var1,var2,var3,var4,var5)
                 'writeProjIni projIni,"variables",styleout
@@ -109,6 +116,7 @@ window.resizeTo wdpx, htpx
                 cmdline = infopar(0) & infopar(1) & infopar(2) & infopar(3) & infopar(4) & infopar(5)
                 objShell.run(cmdline)
         	 End Sub
+
             Function OpenTab(tabgrp,tabid)
                 Dim tab, x, Elem, Elemon, Elemtab , Elemtc, ifrm, tabname, tabactive
                 tab = tabgrp
@@ -126,7 +134,8 @@ window.resizeTo wdpx, htpx
 
     </head>
     <body>
-        <div id="main" class="tabcontent active">
+		<!--<h3 id="apptitle"></h3>-->
+       <div id="main" class="tabcontent active">
             <h4>Search </h4>
             <table>
                 <tr>
@@ -134,7 +143,7 @@ window.resizeTo wdpx, htpx
                         <form name="myGroup">
         <p>Where to Search:</p>
         
-        <input type="radio" value="main" checked= /> Main Indexes<br/>
+        <input type="radio" name="group" value="main" checked= /> Main Indexes<br/>
         <input type="radio" name="group" value="pics"/> Images<br/>
         <input type="radio" name="group" value="qbmag"/> QB Magazine<br/>
         <input type="radio" name="group" value="files"/> Digital Files<br/>
