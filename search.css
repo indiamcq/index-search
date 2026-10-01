@@ -1,0 +1,47 @@
+
+body { font-family: sans-serif; padding: 20px; background:lightblue;}
+textarea { width: 100%; height: 120px; font-family: monospace; }
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 0 2px 0 6px;
+    /* border: 1px solid #ccc; */
+    border-top: none;
+    min-height:3cm;
+    clear:both;
+}
+div.active {
+    display: block;
+}
+.tablinks {
+    clear:both;
+    overflow: hidden;
+    /* border: 1px solid #ccc; */
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tablinks button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 11px;
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tablinks:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tablinks.active {
+    background-color: #ccc;
+}
+h4 {padding-top:1em;}
+td, th {
+    vertical-align: top;
+}
+
