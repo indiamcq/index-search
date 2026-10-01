@@ -3,154 +3,178 @@
     <head>
         <title>Index Search</title>
         <hta:application id="IndexSearch" singleinstance="yes" ICON="index.ico"/>
-        <style>
-        body { font-family: sans-serif; padding: 20px; background:lightblue;}
-        textarea { width: 100%; height: 120px; font-family: monospace; }
-        /* Style the tab content */
-        .tabcontent {
-            display: none;
-            padding: 0 2px 0 6px;
-            /* border: 1px solid #ccc; */
-            border-top: none;
-            min-height:3cm;
-            clear:both;
-        }
-        div.active {
-            display: block;
-        }
-        .tablinks {
-            clear:both;
-            overflow: hidden;
-            /* border: 1px solid #ccc; */
-            background-color: #f1f1f1;
-        }
-        
-        /* Style the buttons that are used to open the tab content */
-        .tablinks button {
-            background-color: inherit;
-            float: left;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 10px 11px;
-            transition: 0.3s;
-        }
-        
-        /* Change background color of buttons on hover */
-        .tablinks:hover {
-            background-color: #ddd;
-        }
-        
-        /* Create an active/current tablink class */
-        .tablinks.active {
-            background-color: #ccc;
-        }
-		h4 {padding-top:1em;}
-        td, th {
-            vertical-align: top;
-        }
-    </style>
-        <link rel="stylesheet" href="custom.css">
-        <script language="VBScript">
-            Dim shell, dbName, objShell, nosp, java, saxon, htmlfile, source, maintab, target, width, height, htpx, wdpx, normhtproportion, normwdproportion
-			 maintab = Array("main","pics","qbmag","every","files")
-    		 Set objShell = CreateObject("Wscript.Shell")
-			 nosp = "~"
-			 java = "javafx\bin\java.exe"
-			 saxon = "saxon\saxon12he.jar"
-			 htmlpath = "output\"
-			 source = "source\all-indexes.xml"
-			 tabgrp = 4
-            ' Calculate pixels based on screen resolution
-            width = screen.availWidth
-            height = screen.availHeight
-            normhtproportion = 0.46
-            normwdproportion = 0.28
-            htpx = height * normhtproportion
-            wdpx = width * normwdproportion
-            ' Set the size of the window
-			 window.resizeTo wdpx, htpx
-			' 1. Create the XML DOM object
-            'Set xmlDoc = CreateObject("MSXML2.DOMDocument.6.0")
-            'xmlDoc.setProperty "SelectionLanguage", "XPath"
-            ' 2. Load the XML file
-            'If xmlDoc.Load("setup.xml") Then
-            ' 	set apptitle = xmlDoc.selectNodes("//setup/apptitle[1]")
-            'End If
-            'Set xmlDoc = Nothing
-            'document.getElementById("apptitle").InnerText = apptitle
-
-            Sub window_onload
-				 IndexSearch.icon = "index.ico"
-            End Sub
-
-            Function GetRadioValue(radioGroup)
-                Dim opt
-                For Each opt In radioGroup
-                    If opt.Checked Then
-                        GetRadioValue = opt.Value
-                        Exit Function
-                    End If
-                Next
-                GetRadioValue = ""
-            End Function
-
-            Sub FindString()
-                Dim searchString, selectedValue, selectedOutput, selectedType
-                searchString = Replace(document.getElementById("stringSearch").value," ",nosp)
-				  selectedValue = GetRadioValue(document.myGroup.group)
-				  selectedOutput = GetRadioValue(document.outputType.out)
-				  selectedType = GetRadioValue(document.searchType.type)
- 				  call RunScript("search.cmd",selectedType,searchString,nosp,selectedValue,selectedOutput)
-            End Sub
-  
-            Sub RunScript(script,var1,var2,var3,var4,var5)
-                'writeProjIni projIni,"variables",styleout
-                dim infopar(5), x
-                infopar(0) = chr(34) & script & chr(34)
-                infopar(1) = " " & var1
-                infopar(2) = " " & var2
-                infopar(3) = " " & var3
-                infopar(4) = " " & var4
-                infopar(5) = " " & var5
-                cmdline = infopar(0) & infopar(1) & infopar(2) & infopar(3) & infopar(4) & infopar(5)
-                objShell.run(cmdline)
-        	 End Sub
-
-            Function OpenTab(tabgrp,tabid)
-                Dim tab, x, Elem, Elemon, Elemtab , Elemtc, ifrm, tabname, tabactive
-                tab = tabgrp
-                tabactive = tabid & "tab"
-                For x = 0 To Ubound(tabgrp)
-                  tabname = tab(x) & "tab"
-                  document.getElementById(tab(x)).style.display = "none"
-                  document.getElementById(tabname).style.background = "#f1f1f1"
-                Next
-                document.getElementById(tabid).style.display = "block"
-                document.getElementById(tabactive).style.background = "#ccc"
-            End Function
-	     </script>
+        <link rel="stylesheet" href="searcj.css"/>
+        <script type="text/vbscript" src="search.vbs"></script>
         <meta version="2.0"/>
-
     </head>
-    <body>
-		<!--<h3 id="apptitle"></h3>-->
-       <div id="main" class="tabcontent active">
+    <body style="background:lightblue;font-family: sans-serif;">
+        <!--<h3 id="apptitle"></h3>-->
+        <div id="main" class="tabcontent active">
             <h4>Search </h4>
             <table>
                 <tr>
-                    <td>
+                    <td width="50%">
                         <form name="myGroup">
-        <p>Where to Search:</p>
-        
-        <input type="radio" name="group" value="main" checked= /> Main Indexes<br/>
-        <input type="radio" name="group" value="pics"/> Images<br/>
-        <input type="radio" name="group" value="qbmag"/> QB Magazine<br/>
-        <input type="radio" name="group" value="files"/> Digital Files<br/>
-        <input type="radio" name="group" value="min"/> Ministers List 2026<br/>
-        <input type="radio" name="group" value="books"/> Books<br/>
-		 <input type="radio" name="group" value="every"/> Everything<br/>
-    </form>
+                            <p>Where to Search:</p>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <input id="radioa" type="radio" name="group" value="a" checked=""/>
+                                    </td>
+                                    <td id="labela"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiob" type="radio" name="group" value="b"/>
+                                    </td>
+                                    <td id="labelb"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radioc" type="radio" name="group" value="c"/>
+                                    </td>
+                                    <td id="labelc"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiod" type="radio" name="group" value="d"/>
+                                    </td>
+                                    <td id="labeld"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radioe" type="radio" name="group" value="e"/>
+                                    </td>
+                                    <td id="labele"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiof" type="radio" name="group" value="f"/>
+                                    </td>
+                                    <td id="labelf"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiog" type="radio" name="group" value="g"/>
+                                    </td>
+                                    <td id="labelg"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radioh" type="radio" name="group" value="h"/>
+                                    </td>
+                                    <td id="labelh"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radioi" type="radio" name="group" value="i"/>
+                                    </td>
+                                    <td id="labeli"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radioj" type="radio" name="group" value="j"/>
+                                    </td>
+                                    <td id="labelj"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiok" type="radio" name="group" value="k"/>
+                                    </td>
+                                    <td id="labelk"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiol" type="radio" name="group" value="l"/>
+                                    </td>
+                                    <td id="labell"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiom" type="radio" name="group" value="m"/>
+                                    </td>
+                                    <td id="labelm"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radion" type="radio" name="group" value="n"/>
+                                    </td>
+                                    <td id="labeln"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radioo" type="radio" name="group" value="o"/>
+                                    </td>
+                                    <td id="labelo"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiop" type="radio" name="group" value="p"/>
+                                    </td>
+                                    <td id="labelp"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radioq" type="radio" name="group" value="q"/>
+                                    </td>
+                                    <td id="labelq"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radior" type="radio" name="group" value="r"/>
+                                    </td>
+                                    <td id="labelr"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radios" type="radio" name="group" value="s"/>
+                                    </td>
+                                    <td id="labels"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiot" type="radio" name="group" value="t"/>
+                                    </td>
+                                    <td id="labelt"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiou" type="radio" name="group" value="u"/>
+                                    </td>
+                                    <td id="labelu"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiov" type="radio" name="group" value="v"/>
+                                    </td>
+                                    <td id="labelv"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiow" type="radio" name="group" value="w"/>
+                                    </td>
+                                    <td id="labelw"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radiox" type="radio" name="group" value="x"/>
+                                    </td>
+                                    <td id="labelx"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radioy" type="radio" name="group" value="y"/>
+                                    </td>
+                                    <td id="labely"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="radioz" type="radio" name="group" value="z"/>
+                                    </td>
+                                    <td id="labelz"></td>
+                                </tr>
+                            </table>
+                        </form>
                     </td>
                     <td style="padding-left:2em;">
                         <form name="searchType">
