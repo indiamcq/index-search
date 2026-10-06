@@ -13,7 +13,7 @@ tskgrp =  Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p",
 ' Calculate pixels based on screen resolution
 width = screen.availWidth
 height = screen.availHeight
-normhtproportion = 0.46
+normhtproportion = 0.5
 normwdproportion = 0.28
 htpx = height * normhtproportion
 wdpx = width * normwdproportion
