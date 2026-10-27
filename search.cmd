@@ -17,9 +17,10 @@ goto :eof
   set source=source\all-indexes.xml
   set search=tmp\search.xml
   set info2=on
-  set reset=[0m
   set green=[32m
+  set cyan=[36m
   set blue=[34m
+  set reset=[0m
   if not exist %source% echo %red%all-indexes.xml not found in 'source' folder! Can't complete search. Will exit in 20 seconds. & timeout 20 & exit
   set safestring=%sstring:?=_%
   set htmlfile=%cd%\output\%stype%-%grp%-%safestring%.html
@@ -29,7 +30,7 @@ goto :eof
   if not exist output md output
   if exist %htmlfile% del %htmlfile%
   rem end setup
-  call :searchpresent %stype%
+  call :searchpresent
   if exist chrome.exe (
     echo %cyan%start chrome.exe "%outfile%"%reset%
     start chrome.exe "%outfile%"
@@ -42,7 +43,7 @@ goto :eof
 goto :eof
 
 :searchpresent
-  call :xslt search-present-target.xslt %source% %htmlfile% "type=%stype% searchword='%sstring%' nosp=%nosp% target='%grp%' output=%output%"
+  @call :xslt search-present-target.xslt %source% %htmlfile% "type=%stype% searchword='%sstring%' nosp=%nosp% target='%grp%' output=%output%"
 goto :eof
 
 :xslt
