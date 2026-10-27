@@ -32,7 +32,7 @@
                 <xsl:apply-templates select="//collection"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="//collection[@group = $target]"/>
+                <xsl:apply-templates select="//collection[contains(@group,$target)]"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
