@@ -1,29 +1,24 @@
-@rem version 3
+@rem version 5
 @echo off
-set stype=%1
-set sstring=%2
-set nosp=%3
-set grp=%4
-set output=%~5
-set debug=%~6
+set safeoutfile=%~1
+set debug=%~2
+if defined debug echo on
+
 call :main
+if defined debug pause
 goto :eof
 
 :main
-  echo stype=%stype%
-  echo sstring=%sstring%
-  echo nosp=%nosp%
-  echo grp=%grp%
-  set source=source\all-indexes.xml
-  set search=tmp\search.xml
   set info2=on
-  set green=[32m
-  set cyan=[36m
-  set blue=[34m
-  set reset=[0m
-  if not exist %source% echo %red%all-indexes.xml not found in 'source' folder! Can't complete search. Will exit in 20 seconds. & timeout 20 & exit
-  set safestring=%sstring:?=_%
-  set htmlfile=%cd%\output\%stype%-%grp%-%safestring%.html
+  @set green=[32m
+  @set cyan=[36m
+  @set blue=[34m
+  @set reset=[0m
+  echo %green%safeoutfile: %safeoutfile%%reset%
+  set source=source\all-indexes.xml
+  if not exist %source% echo %red%%source% not found in 'source' folder! Can't complete search. Will exit in 20 seconds. & timeout 20 & exit
+  set htmlfile=%cd%\output\%safeoutfile%.html
+  echo %htmlfile%
   set java=..\javafx\bin\java.exe
   set saxon=..\saxon\saxon12he.jar
   set timeout=60
@@ -39,11 +34,11 @@ goto :eof
     start "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" "%outfile%"
   )
   if '%errorlevel%' == 1 pause
-  timeout 60
+  timeout 20
 goto :eof
 
 :searchpresent
-  @call :xslt search-present-target.xslt %source% %htmlfile% "type=%stype% searchword='%sstring%' nosp=%nosp% target='%grp%' output=%output%"
+  @call :xslt index-search.xslt %source% %htmlfile% 
 goto :eof
 
 :xslt

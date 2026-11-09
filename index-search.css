@@ -40,8 +40,22 @@ div.active {
 .tablinks.active {
     background-color: #ccc;
 }
-h4 {padding-top:1em;}
+h4 {}
+#col1 {display:inline-block;float:left;min-width:40%}
+#col2 {padding-left:2em;display:inline-block;}
 td, th {
     vertical-align: top;
 }
+
+ul {
+  list-style-type: none; /* Removes the bullets */
+  padding: 0;            /* Removes default left padding */
+  margin: 0;             /* Removes default top/bottom margins */
+}
+
+#tosearch{margin-top:-4em;}
+.oplabel {margin-bottom:4pt;padding-bottom:0;}
+.addtop {margin-top:2em;}
+input {display:inline-block;}
+span {display:inline;}
 

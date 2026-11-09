@@ -3,198 +3,74 @@
     <head>
         <title>Index Search</title>
         <hta:application id="IndexSearch" singleinstance="yes" ICON="index.ico"/>
-        <link rel="stylesheet" href="search.css"/>
-        <script type="text/vbscript" src="search.vbs"></script>
+        <link rel="stylesheet" href="index-search.css"/>
+        <script type="text/vbscript" src="index-search.vbs"></script>
         <meta version="2.0"/>
     </head>
     <body>
         <!--<h3 id="apptitle"></h3>-->
         <div id="main" class="tabcontent active">
             <h4 id="h4">Search </h4>
-            <table>
-                <tr>
-                    <td width="40%">
-                        <form name="myGroup">
-                            <p>Where to Search:</p>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <input id="radioa" type="radio" name="group" value="a" checked=""/>
-                                    </td>
-                                    <td id="labela"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiob" type="radio" name="group" value="b"/>
-                                    </td>
-                                    <td id="labelb"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radioc" type="radio" name="group" value="c"/>
-                                    </td>
-                                    <td id="labelc"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiod" type="radio" name="group" value="d"/>
-                                    </td>
-                                    <td id="labeld"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radioe" type="radio" name="group" value="e"/>
-                                    </td>
-                                    <td id="labele"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiof" type="radio" name="group" value="f"/>
-                                    </td>
-                                    <td id="labelf"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiog" type="radio" name="group" value="g"/>
-                                    </td>
-                                    <td id="labelg"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radioh" type="radio" name="group" value="h"/>
-                                    </td>
-                                    <td id="labelh"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radioi" type="radio" name="group" value="i"/>
-                                    </td>
-                                    <td id="labeli"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radioj" type="radio" name="group" value="j"/>
-                                    </td>
-                                    <td id="labelj"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiok" type="radio" name="group" value="k"/>
-                                    </td>
-                                    <td id="labelk"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiol" type="radio" name="group" value="l"/>
-                                    </td>
-                                    <td id="labell"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiom" type="radio" name="group" value="m"/>
-                                    </td>
-                                    <td id="labelm"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radion" type="radio" name="group" value="n"/>
-                                    </td>
-                                    <td id="labeln"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radioo" type="radio" name="group" value="o"/>
-                                    </td>
-                                    <td id="labelo"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiop" type="radio" name="group" value="p"/>
-                                    </td>
-                                    <td id="labelp"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radioq" type="radio" name="group" value="q"/>
-                                    </td>
-                                    <td id="labelq"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radior" type="radio" name="group" value="r"/>
-                                    </td>
-                                    <td id="labelr"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radios" type="radio" name="group" value="s"/>
-                                    </td>
-                                    <td id="labels"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiot" type="radio" name="group" value="t"/>
-                                    </td>
-                                    <td id="labelt"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiou" type="radio" name="group" value="u"/>
-                                    </td>
-                                    <td id="labelu"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiov" type="radio" name="group" value="v"/>
-                                    </td>
-                                    <td id="labelv"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiow" type="radio" name="group" value="w"/>
-                                    </td>
-                                    <td id="labelw"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radiox" type="radio" name="group" value="x"/>
-                                    </td>
-                                    <td id="labelx"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radioy" type="radio" name="group" value="y"/>
-                                    </td>
-                                    <td id="labely"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="radioz" type="radio" name="group" value="z"/>
-                                    </td>
-                                    <td id="labelz"></td>
-                                </tr>
-                            </table>
-                        </form>
-                    </td>
-                    <td style="padding-left:2em;">
-                        <form name="searchType">
-        <p>Select what type of Search:</p>
-        <input type="radio" name="type" value="phrase" checked= /> Word or phrase <br/>&#x2003;(case insensitive) search<br/>
-        <input type="radio" name="type" value="multi"/> Non-contiguous word search<br/>
-        <input type="radio" name="type" value="regex"/> Regular Expression search<br/>
-    </form>
-                        <form name="outputType">
-<p>Select output type:</p>
-        <input type="radio" name="out" value="table" checked= /> Table<br/>
-        <input type="radio" name="out" value="para"/> In paragraphs with tags<br/>
-</form>
-                    </td>
-                </tr>
-            </table>
+            <div id="contain">
+                <div id="col1">
+                    <form name="myTarget">
+                        <p>Where to Search:</p>
+                        <ul id="groups">
+                            <li id="labela"></li>
+                            <li id="labelb"></li>
+                            <li id="labelc"></li>
+                            <li id="labeld"></li>
+                            <li id="labele"></li>
+                            <li id="labelf"></li>
+                            <li id="labelg"></li>
+                            <li id="labelh"></li>
+                            <li id="labeli"></li>
+                            <li id="labelj"></li>
+                            <li id="labelk"></li>
+                            <li id="labell"></li>
+                            <li id="labelm"></li>
+                            <li id="labeln"></li>
+                            <li id="labelo"></li>
+                            <li id="labelp"></li>
+                            <li id="labelq"></li>
+                            <li id="labelr"></li>
+                            <li id="labels"></li>
+                            <li id="labelt"></li>
+                            <li id="labelu"></li>
+                            <li id="labelv"></li>
+                            <li id="labelw"></li>
+                            <li id="labelx"></li>
+                            <li id="labely"></li>
+                            <li id="labelz"></li>
+                        </ul>
+                    </form>
+                </div>
+                <div id="col2">
+                    <form name="searchType">
+                        <p>Select what type of Search:</p>
+                        <ul id="types">
+                            <li id="phrase"></li>
+                            <li id="multi"></li>
+                            <li id="regex"></li>
+                        </ul>
+                    </form>
+                    <form name="formatType">
+                        <p>Select output type:</p>
+                        <ul id="format">
+                            <li id="table"></li>
+                            <li id="para"></li>
+                            <li id="list"></li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
             <p>
                 <input type="text" id="stringSearch" style="width: 300px;"/>
                 <button onclick="FindString()">Search</button>
             </p>
         </div>
+        <!-- <p id="bug1"></p>
+        <p id="bug2"></p>
+        <p id="bug3"></p> -->
     </body>
 </html>

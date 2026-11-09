@@ -5,3 +5,13 @@ tr:nth-child(even) {
 th {background-color: powderblue;}
 .hilight {background-color:yellow;}
 .hilite {background-color:yellow;}
+
+/* para view */
+.ptag {color:darkgray;}
+/* list view */
+.tag {margin:2pt;display:inline-block;width:10em;background-color:silver;border:1pt solid grey;padding:1pt 1em 1pt 1em;}
+.val {display:inline-block;border:1pt solid powderblue;background-color:white;padding:1pt 1em 1pt 1em;}
+.list {background-color:powderblue;}
+.para {background-color:honeydew;}
+.para p {max-width:1000px;}
+.record {border:2pt solid gray;margin-top:1em;}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     #############################################################
-    # Name:     	present-search.xslt
+    # Name:     	index-search.xslt
     # Purpose:  	reformat for presentation.
     # Part of:  	Xrunner - https://github.com/SILAsiaPub/xrunner2
     # Author:   	Ian McQuay <india.mcq@gmail.com>
@@ -9,22 +9,16 @@
     # Copyright:	(c) 2026 Ian McQuay
     # Licence:  	<MIT>
     ################################################################ -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="myfunctions" exclude-result-prefixes="f">
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="myfunctions" exclude-result-prefixes="f">
     <xsl:output method="xml" version="1.0" encoding="utf-8" omit-xml-declaration="no" indent="yes" name="xml"/>
-    <xsl:output method="xml" version="1.0" encoding="utf-8" omit-xml-declaration="no" indent="yes" suppress-indentation="h1 h2 h3 p li dd dt td th"/>
+    <xsl:output method="xml" version="1.0" encoding="utf-8" omit-xml-declaration="no" indent="yes" suppress-indentation="h1 h2 h3 li dd dt td th"/>
     <!--  suppress-indentation="h1 h2 h3 p li dd dt td th"-->
     <!-- <xsl:output method="text" encoding="utf-8" /> -->
-    <!-- <xsl:include href="project.xslt"/> -->
-    <!-- <xsl:param name="searchword"/> -->
-    <xsl:param name="type"/>
-    <xsl:param name="searchword"/>
-    <xsl:param name="nosp"/>
-    <xsl:param name="target"/>
-    <xsl:param name="output"/>
-    <xsl:variable name="spacedsearchwordsulc" select="translate($searchword,$nosp,' ')"/>
-    <xsl:variable name="spacedsearchwords" select="lower-case(translate($searchword,$nosp,' '))"/>
-    <xsl:variable name="regexsearchwords" select="translate($searchword,$nosp,' ')"/>
-    <xsl:variable name="wd2find" select="tokenize($spacedsearchwords,' ')"/>
+    <xsl:include href="index-param.xslt"/>
+    <xsl:variable name="researchwords" select="concat('(',$searchwords,')')"/>
+    <xsl:variable name="lcsearchwords" select="lower-case($searchwords)"/>
+    <xsl:variable name="remultisearchwords" select="concat('(',translate($searchwords,' ','|'),')')"/>
+    <xsl:variable name="wd2find" select="tokenize($searchwords,' ')"/>
     <xsl:variable name="wd2findcount" select="count($wd2find)"/>
     <xsl:variable name="found">
         <xsl:choose>
@@ -40,26 +34,28 @@
         <html lang="en">
             <head>
                 <title>
-                    <xsl:value-of select="$searchword"/>
+                    <xsl:value-of select="$searchwords"/>
                 </title>
                 <meta charset='utf-8'/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                <link rel="stylesheet" href="../result.css"/>
-                <link rel="icon" type="image/x-icon" href="../index.ico"/>
+                <link rel="stylesheet" href="../index-result.css"/>
+                <link rel="icon" href="../index-search.ico"/>
             </head>
-            <body>
+            <body class="{$format}">
+                <xsl:comment select="$remultisearchwords"/>
                 <xsl:element name="h1">
                     <xsl:text>Search results for: </xsl:text>
-                    <xsl:value-of select="replace($searchword,$nosp,' ')"/>
-                    <xsl:apply-templates select="$found/collection" mode="html"/>
+                    <xsl:value-of select="$searchwords"/>
                 </xsl:element>
+                <xsl:element name="p">The search was a <i><xsl:value-of select="$type"/></i> search of <i><xsl:value-of select="$target"/></i> index and output <i><xsl:value-of select="$format"/></i> format. <xsl:if test="$type != 'multi'"><xsl:text>Note: Empty fields are ommitted.</xsl:text></xsl:if></xsl:element>
+                <xsl:apply-templates select="$found/collection" mode="html"/>
             </body>
         </html>
-        <xsl:result-document href="found.xml" format="xml">
+        <!-- <xsl:result-document href="found-phase1.xml" format="xml">
             <xsl:element name="found">
                 <xsl:sequence select="$found"/>
             </xsl:element>
-        </xsl:result-document>
+        </xsl:result-document> -->
     </xsl:template>
     <xsl:template match="collection|collection[@group = $target]">
         <xsl:copy>
@@ -71,27 +67,27 @@
     <xsl:template match="r">
         <xsl:variable name="lctext" select="lower-case(text())"/>
         <xsl:choose>
-            <xsl:when test="$type = 'phrase' and contains($lctext,$spacedsearchwords)">
+            <xsl:when test="$type = 'phrase' and contains($lctext,$lcsearchwords)">
                 <xsl:copy-of select="."/>
             </xsl:when>
             <xsl:when test="$type = 'multi'">
                 <xsl:choose>
-                    <xsl:when test="$wd2findcount = 1 and contains($lctext,$wd2find[1])">
+                    <xsl:when test="$wd2findcount = 1 and matches(text(),$wd2find[1],'i')">
                         <xsl:copy-of select="."/>
                     </xsl:when>
-                    <xsl:when test="$wd2findcount = 2 and contains($lctext,$wd2find[1]) and contains($lctext,$wd2find[2])">
+                    <xsl:when test="$wd2findcount = 2 and matches(text(),$wd2find[1],'i') and matches(text(),$wd2find[2],'i')">
                         <xsl:copy-of select="."/>
                     </xsl:when>
-                    <xsl:when test="$wd2findcount = 3 and contains($lctext,$wd2find[1]) and contains($lctext,$wd2find[2]) and contains($lctext,$wd2find[3])">
+                    <xsl:when test="$wd2findcount = 3 and matches(text(),$wd2find[1],'i') and matches(text(),$wd2find[2],'i') and matches(text(),$wd2find[3],'i')">
                         <xsl:copy-of select="."/>
                     </xsl:when>
-                    <xsl:when test="$wd2findcount = 4 and contains($lctext,$wd2find[1]) and contains($lctext,$wd2find[2]) and contains($lctext,$wd2find[3]) and contains($lctext,$wd2find[4])">
+                    <xsl:when test="$wd2findcount = 4 and matches($lctext,$wd2find[1],'i') and matches(text(),$wd2find[2],'i') and matches(text(),$wd2find[3],'i') and matches(text(),$wd2find[4],'i')">
                         <xsl:copy-of select="."/>
                     </xsl:when>
                     <xsl:otherwise></xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-            <xsl:when test="$type = 'regex' and matches(text(),$regexsearchwords)">
+            <xsl:when test="$type = 'regex' and matches(text(),$searchwords,'i')">
                 <xsl:copy-of select="."/>
             </xsl:when>
             <xsl:otherwise></xsl:otherwise>
@@ -108,211 +104,183 @@
                     <xsl:value-of select="@index"/>
                 </xsl:element>
                 <xsl:choose>
-                    <xsl:when test="$output = 'table'">
+                    <xsl:when test="$format = 'table'">
                         <xsl:element name="table">
                             <xsl:element name="tr">
                                 <xsl:for-each select="$head">
-                                    <xsl:element name="th">
-                                        <xsl:value-of select="."/>
-                                    </xsl:element>
+                                    <xsl:if test="string-length(.) &gt; 0">
+                                        <xsl:element name="th">
+                                            <xsl:value-of select="."/>
+                                        </xsl:element>
+                                    </xsl:if>
                                 </xsl:for-each>
                             </xsl:element>
-                            <xsl:apply-templates select="r" mode="html"/>
+                            <xsl:apply-templates select="r" mode="html-table"/>
                         </xsl:element>
                     </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="r" mode="html">
+                    <xsl:when test="$format = 'para'">
+                        <xsl:apply-templates select="r" mode="html-para">
                             <xsl:with-param name="head" select="$head"/>
                         </xsl:apply-templates>
-                    </xsl:otherwise>
+                    </xsl:when>
+                    <xsl:when test="$format = 'list'">
+                        <xsl:apply-templates select="r" mode="html-list">
+                            <xsl:with-param name="head" select="$head"/>
+                        </xsl:apply-templates>
+                    </xsl:when>
                 </xsl:choose>
             </xsl:element>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="r" mode="html">
-        <xsl:param name="head"/>
-        <xsl:variable name="cell" select="tokenize(.,'\t')"/>
-        <xsl:choose>
-            <xsl:when test="$output = 'table'">
-                <xsl:sequence select="f:tcell($cell)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="f:cell($head,$cell)"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    <!--     <xsl:function name="f:multifind">
-        <xsl:param name="text"/>
-        <xsl:param name="wd2find"/>
-        <xsl:param name="testseq"/>
-        <xsl:param name="count"/>
-        <xsl:choose>
-            <xsl:when test="$testseq &gt;= count($wd2find)">
-                <xsl:value-of select="$count"/>
-            </xsl:when>
-            <xsl:when test="contains($text,$wd2find[$testseq])">
-                <xsl:value-of select="f:multifind($text,$wd2find,$testseq + 1,$count + 1)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="f:multifind(lower-case($text),$wd2find,$testseq + 1,$count)"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function> -->
-    <xsl:function name="f:cell">
-        <xsl:param name="head"/>
-        <xsl:param name="cell"/>
-        <xsl:element name="p">
-            <xsl:for-each select="$cell">
-                <xsl:variable name="pos" select="position()"/>
-                <xsl:element name="span">
-                    <xsl:attribute name="class">
-                        <xsl:text>label</xsl:text>
-                    </xsl:attribute>
-                    <xsl:value-of select="$head[$pos]"/>
-                </xsl:element>
-                <xsl:value-of select="."/>
-                <xsl:text>&#x2002;</xsl:text>
-            </xsl:for-each>
-        </xsl:element>
-    </xsl:function>
-    <xsl:function name="f:tcell">
-        <xsl:param name="tcell"/>
+    <xsl:template match="r" mode="html-table">
         <xsl:element name="tr">
-            <xsl:for-each select="$tcell">
-                <xsl:variable name="lctext" select="lower-case(.)"/>
-                <xsl:choose>
-                    <xsl:when test="$type = 'multi' and $wd2findcount = 1 and  contains($lctext,$wd2find[1])">
-                        <xsl:element name="td">
-                            <xsl:attribute name="class">
-                                <xsl:text>hilight</xsl:text>
-                            </xsl:attribute>
-                            <xsl:value-of select="."/>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:when test="$type = 'multi' and $wd2findcount = 2 and (contains($lctext,$wd2find[1]) or contains($lctext,$wd2find[2]))">
-                        <xsl:element name="td">
-                            <xsl:attribute name="class">
-                                <xsl:text>hilight</xsl:text>
-                            </xsl:attribute>
-                            <xsl:value-of select="."/>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:when test="$type = 'multi' and $wd2findcount = 3 and (contains($lctext,$wd2find[1]) or contains($lctext,$wd2find[2]) or contains($lctext,$wd2find[3]))">
-                        <xsl:element name="td">
-                            <xsl:attribute name="class">
-                                <xsl:text>hilight</xsl:text>
-                            </xsl:attribute>
-                            <xsl:value-of select="."/>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:when test="$type = 'multi' and $wd2findcount = 4 and (contains($lctext,$wd2find[1]) or contains($lctext,$wd2find[2]) or contains($lctext,$wd2find[3]) or contains($lctext,$wd2find[4]))">
-                        <xsl:element name="td">
-                            <xsl:attribute name="class">
-                                <xsl:text>hilight</xsl:text>
-                            </xsl:attribute>
-                            <xsl:value-of select="."/>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:when test="$type = 'regex' and matches(.,$regexsearchwords)">
-                        <xsl:variable name="re" select="concat('.*(',$regexsearchwords,').*')"/>
-                        <xsl:variable name="restring" select="replace(.,$re,'$1')"/>
-                        <xsl:element name="td">
-                            <xsl:sequence select="f:hilite(.,$restring)"/>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:when test="$type = 'phrase' and contains(.,$spacedsearchwordsulc)">
-                        <xsl:element name="td">
-                            <xsl:sequence select="f:hilite(.,$spacedsearchwordsulc)"/>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:when test="$type = 'phrase' and contains($lctext,$spacedsearchwords)">
-                        <xsl:element name="td">
-                            <xsl:sequence select="f:hilite(.,$spacedsearchwords)"/>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:element name="td">
-                            <xsl:value-of select="."/>
-                        </xsl:element>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
+            <xsl:choose>
+                <xsl:when test="$type = 'phrase'">
+                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$searchwords,')'),'§$1§','i')"/>
+                    <xsl:sequence select="f:tcell($markedsearchwords)"/>
+                </xsl:when>
+                <xsl:when test="$type = 'multi'">
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$remultisearchwords,'§$1§','i')"/>
+                    <xsl:sequence select="f:tcell($markedsearchwords)"/>
+                </xsl:when>
+                <xsl:when test="$type = 'regex'">
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'§$1§')"/>
+                    <xsl:sequence select="f:tcell($markedsearchwords)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="text()"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:element>
+    </xsl:template>
+    <xsl:template match="r" mode="html-para">
+        <xsl:param name="head"/>
+        <xsl:element name="p">
+            <xsl:choose>
+                <xsl:when test="$type = 'phrase'">
+                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$searchwords,')'),'§$1§','i')"/>
+                    <xsl:sequence select="f:pcell($markedsearchwords,$head)"/>
+                </xsl:when>
+                <xsl:when test="$type = 'multi'">
+                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$remultisearchwords,')'),'§$1§','i')"/>
+                    <xsl:sequence select="f:pcell($markedsearchwords,$head)"/>
+                </xsl:when>
+                <xsl:when test="$type = 'regex'">
+                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$researchwords,')'),'§$1§')"/>
+                    <xsl:sequence select="f:pcell($markedsearchwords,$head)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="text()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:element>
+    </xsl:template>
+    <xsl:template match="r" mode="html-list">
+        <xsl:param name="head"/>
+        <xsl:element name="div">
+            <xsl:attribute name="class">
+                <xsl:text>record</xsl:text>
+            </xsl:attribute>
+            <xsl:choose>
+                <xsl:when test="$type = 'phrase'">
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'§$1§','i')"/>
+                    <xsl:sequence select="f:listcell($markedsearchwords,$head)"/>
+                </xsl:when>
+                <xsl:when test="$type = 'multi'">
+                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$remultisearchwords,')'),'§$1§','i')"/>
+                    <xsl:sequence select="f:listcell($markedsearchwords,$head)"/>
+                </xsl:when>
+                <xsl:when test="$type = 'regex'">
+                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$researchwords,')'),'§$1§')"/>
+                    <xsl:sequence select="f:listcell($markedsearchwords,$head)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="text()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:element>
+    </xsl:template>
+    <xsl:function name="f:tcell">
+        <xsl:param name="string"/>
+        <xsl:variable name="cell" select="tokenize($string,'\t')"/>
+        <xsl:for-each select="$cell">
+            <xsl:element name="td">
+                <xsl:sequence select="f:parsemarked(.)"/>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:function>
+    <xsl:function name="f:pcell">
+        <xsl:param name="string"/>
+        <xsl:param name="head"/>
+        <xsl:variable name="cell" select="tokenize($string,'\t')"/>
+        <xsl:for-each select="$cell">
+            <xsl:variable name="pos" select="position()"/>
+            <xsl:if test="string-length(.) &gt; 0">
+                <xsl:text> </xsl:text>
+                <xsl:element name="span">
+                    <xsl:attribute name="class">ptag</xsl:attribute>
+                    <xsl:value-of select="$head[$pos]"/>
+                    <xsl:text>: </xsl:text>
+                </xsl:element>
+                <xsl:sequence select="f:parsemarked(.)"/>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:function>
+    <xsl:function name="f:listcell">
+        <xsl:param name="string"/>
+        <xsl:param name="head"/>
+        <xsl:variable name="cell" select="tokenize($string,'\t')"/>
+        <xsl:for-each select="$cell">
+            <xsl:variable name="pos" select="position()"/>
+            <xsl:if test="string-length(.) &gt; 0">
+                <xsl:element name="div">
+                    <xsl:element name="span">
+                        <xsl:attribute name="class">tag</xsl:attribute>
+                        <xsl:value-of select="$head[$pos]"/>
+                        <xsl:text>:&#x2003;&#x2003;</xsl:text>
+                    </xsl:element>
+                    <xsl:element name="span">
+                        <xsl:attribute name="class">val</xsl:attribute>
+                        <xsl:sequence select="f:parsemarked(.)"/>
+                    </xsl:element>
+                </xsl:element>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:function>
+    <xsl:function name="f:parsemarked">
+        <xsl:param name="markedtext"/>
+        <xsl:variable name="match">
+            <xsl:choose>
+                <xsl:when test="$type = 'phrase'">
+                    <xsl:value-of select="$searchwords"/>
+                </xsl:when>
+                <xsl:when test="$type = 'multi'">
+                    <xsl:value-of select="$remultisearchwords"/>
+                </xsl:when>
+                <xsl:when test="$type = 'regex'">
+                    <xsl:value-of select="$researchwords"/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="textarray" select="tokenize($markedtext,'§')"/>
+        <xsl:for-each select="$textarray">
+            <xsl:choose>
+                <xsl:when test="matches(. ,$match,'i')">
+                    <xsl:sequence select="f:hilite(.)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
     </xsl:function>
     <xsl:function name="f:hilite">
         <xsl:param name="text"/>
-        <xsl:param name="search-string"/>
-        <xsl:choose>
-            <xsl:when test="contains($text, $search-string)">
-                <xsl:value-of select="substring-before($text, $search-string)"/>
-                <span>
-                    <xsl:attribute name="class">
-                        <xsl:text>hilite</xsl:text>
-                    </xsl:attribute>
-                    <xsl:value-of select="$search-string"/>
-                </span>
-                <xsl:sequence select="f:hilite(substring-after($text, $search-string),$search-string)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$text"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <span>
+            <xsl:attribute name="class">
+                <xsl:text>hilite</xsl:text>
+            </xsl:attribute>
+            <xsl:value-of select="$text"/>
+        </span>
     </xsl:function>
-    <!-- 
-    <xsl:function name="f:cntfind">
-        <xsl:param name="array"/>
-        <xsl:param name="find"/>
-        <xsl:param name="count"/>
-        <xsl:param name="result"/>
-        <xsl:choose>
-            <xsl:when test="contains($array[number($count)],$find)">
-                <xsl:value-of select="1"/>
-            </xsl:when>
-            <xsl:when test="$count = count($array)">
-                <xsl:value-of select="$result"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="f:cntfind($array,$find,$count +1,$result)"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-    <xsl:function name="f:cntfindRE">
-        <xsl:param name="array"/>
-        <xsl:param name="find"/>
-        <xsl:param name="count"/>
-        <xsl:param name="result"/>
-        <xsl:choose>
-            <xsl:when test="matches($array[number($count)],$find)">
-                <xsl:value-of select="1"/>
-            </xsl:when>
-            <xsl:when test="$count = count($array)">
-                <xsl:value-of select="$result"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="f:cntfindRE($array,$find,$count +1,$result)"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-    <xsl:function name="f:cntfindMulti">
-        <xsl:param name="array"/>
-        <xsl:param name="find"/>
-        <xsl:param name="count"/>
-        <xsl:param name="result"/>
-        <xsl:variable name="result2">
-            <xsl:for-each select="$array">
-                <xsl:value-of select="f:multifind(.,$find,1,0)"/>
-            </xsl:for-each>
-        </xsl:variable>
-        <xsl:choose>
-            <xsl:when test="$result2 &gt;= count($wd2find)">
-                <xsl:value-of select="$result2"/>
-            </xsl:when>
-            <xsl:when test="$count = count($array)">
-                <xsl:value-of select="$result"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="f:cntfindMulti($array,$find,$count + 1,$result2)"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function> -->
 </xsl:stylesheet>
