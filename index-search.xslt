@@ -136,15 +136,15 @@
         <xsl:element name="tr">
             <xsl:choose>
                 <xsl:when test="$type = 'phrase'">
-                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$searchwords,')'),'ง$1ง','i')"/>
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'ยง$1ยง','i')"/>
                     <xsl:sequence select="f:tcell($markedsearchwords)"/>
                 </xsl:when>
                 <xsl:when test="$type = 'multi'">
-                    <xsl:variable name="markedsearchwords" select="replace(text(),$remultisearchwords,'ง$1ง','i')"/>
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$remultisearchwords,'ยง$1ยง','i')"/>
                     <xsl:sequence select="f:tcell($markedsearchwords)"/>
                 </xsl:when>
                 <xsl:when test="$type = 'regex'">
-                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'ง$1ง')"/>
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'ยง$1ยง')"/>
                     <xsl:sequence select="f:tcell($markedsearchwords)"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -158,15 +158,15 @@
         <xsl:element name="p">
             <xsl:choose>
                 <xsl:when test="$type = 'phrase'">
-                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$searchwords,')'),'ง$1ง','i')"/>
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'ยง$1ยง','i')"/>
                     <xsl:sequence select="f:pcell($markedsearchwords,$head)"/>
                 </xsl:when>
                 <xsl:when test="$type = 'multi'">
-                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$remultisearchwords,')'),'ง$1ง','i')"/>
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$remultisearchwords,'ยง$1ยง','i')"/>
                     <xsl:sequence select="f:pcell($markedsearchwords,$head)"/>
                 </xsl:when>
                 <xsl:when test="$type = 'regex'">
-                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$researchwords,')'),'ง$1ง')"/>
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'ยง$1ยง')"/>
                     <xsl:sequence select="f:pcell($markedsearchwords,$head)"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -183,15 +183,15 @@
             </xsl:attribute>
             <xsl:choose>
                 <xsl:when test="$type = 'phrase'">
-                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'ง$1ง','i')"/>
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'ยง$1ยง','i')"/>
                     <xsl:sequence select="f:listcell($markedsearchwords,$head)"/>
                 </xsl:when>
                 <xsl:when test="$type = 'multi'">
-                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$remultisearchwords,')'),'ง$1ง','i')"/>
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$remultisearchwords,'ยง$1ยง','i')"/>
                     <xsl:sequence select="f:listcell($markedsearchwords,$head)"/>
                 </xsl:when>
                 <xsl:when test="$type = 'regex'">
-                    <xsl:variable name="markedsearchwords" select="replace(text(),concat('(',$researchwords,')'),'ง$1ง')"/>
+                    <xsl:variable name="markedsearchwords" select="replace(text(),$researchwords,'ยง$1ยง')"/>
                     <xsl:sequence select="f:listcell($markedsearchwords,$head)"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -262,7 +262,7 @@
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="textarray" select="tokenize($markedtext,'ง')"/>
+        <xsl:variable name="textarray" select="tokenize($markedtext,'ยง')"/>
         <xsl:for-each select="$textarray">
             <xsl:choose>
                 <xsl:when test="matches(. ,$match,'i')">
