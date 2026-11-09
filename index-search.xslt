@@ -4,9 +4,9 @@
     # Name:     	present-search.xslt
     # Purpose:  	reformat for presentation.
     # Part of:  	Xrunner - https://github.com/SILAsiaPub/xrunner2
-    # Author:   	Ian McQuay <ian_mcquay@sil.org>
-    # Created:  	2026-06-01
-    # Copyright:	(c) 2026 SIL International
+    # Author:   	Ian McQuay <india.mcq@gmail.com>
+    # Created:  	2026-06-01; 2026-10-31
+    # Copyright:	(c) 2026 Ian McQuay
     # Licence:  	<MIT>
     ################################################################ -->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="myfunctions" exclude-result-prefixes="f">
@@ -45,6 +45,7 @@
                 <meta charset='utf-8'/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="stylesheet" href="../result.css"/>
+                <link rel="icon" type="image/x-icon" href="../index.ico"/>
             </head>
             <body>
                 <xsl:element name="h1">
